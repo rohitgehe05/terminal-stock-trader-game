@@ -124,5 +124,3 @@ def sell_stock(username):
             qty, symbol, last_price))
         print('For a total of ${}'.format(total_price))
         print('Your balance is now ${}.'.format(balance))
-
-main_menu()
