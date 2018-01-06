@@ -42,8 +42,12 @@ def get_balance(user_id):
 def get_stock_qty(user_id, symbol):
     stock_qty = cur.execute(
         "SELECT quantity FROM Stocks WHERE user_id=(?) and symbol=(?);", (user_id, symbol))
-    stock_qty = cur.fetchone()[0]
-    return stock_qty
+    stock_qty = cur.fetchone()
+    if stock_qty == None:
+        return None
+    else:
+        stock_qty = cur.fetchone()[0]
+        return stock_qty
 
 
 # User trading logic

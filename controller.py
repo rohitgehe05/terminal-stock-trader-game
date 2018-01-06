@@ -62,11 +62,11 @@ def sell_stock(symbol, qty, username):
         return (0, 0, 0, response)
     else:
         total_price = qty * last_price
-    if model.get_stock_qty(user_id, symbol) < qty:
-        response = 400
-        return (0, 0, 0, response)
-    elif model.get_stock_qty(user_id, symbol) == None:
+    if model.get_stock_qty(user_id, symbol) == None:
         response = 401
+        return (0, 0, 0, response)
+    elif model.get_stock_qty(user_id, symbol) < qty:
+        response = 400
         return (0, 0, 0, response)
     else:
         response = 200
