@@ -1,4 +1,7 @@
+import view
+
+
 def main():
-    pass
+    view.main_menu()
 
 main()
