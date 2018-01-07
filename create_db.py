@@ -32,6 +32,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS 'History' (
 'user_id' INTEGER,
 'symbol' VARCHAR,
 'price' REAL,
+'order_value' REAL,
 'quantity' INT,
 'transaction_type' VARCHAR,
 FOREIGN KEY ('user_id') REFERENCES Users(id),
