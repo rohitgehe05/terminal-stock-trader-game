@@ -89,3 +89,9 @@ def sell_stock(user_id, symbol, last_price, total_price, qty):
     cur.execute("INSERT INTO History(user_id, symbol, price, order_value, quantity, transaction_type) VALUES(?,?,?,?,?,?);",
                 (user_id, symbol, last_price, total_price, qty, txn_type))
     conn.commit()
+
+
+def get_trade_history(user_id):
+    cur.execute("SELECT * FROM History WHERE user_id=(?);", (user_id,))
+    result = cur.fetchall()
+    return result
