@@ -1,7 +1,9 @@
 import sqlite3
+from IPython import embed
 
 conn = sqlite3.connect('stock_trader.sqlite')
 cur = conn.cursor()
+
 
 # User action logic
 
@@ -43,11 +45,10 @@ def get_stock_qty(user_id, symbol):
     stock_qty = cur.execute(
         "SELECT quantity FROM Stocks WHERE user_id=(?) and symbol=(?);", (user_id, symbol))
     stock_qty = cur.fetchone()
-    if stock_qty == None:
-        return None
+    if stock_qty is not None:
+        return stock_qty[0]
     else:
-        stock_qty = cur.fetchone()[0]
-        return stock_qty
+        return None
 
 
 # User trading logic
@@ -69,6 +70,8 @@ def buy_stock(user_id, symbol, last_price, total_price, qty):
 
 
 def sell_stock(user_id, symbol, last_price, total_price, qty):
-    cur.execute("UPDATE Stocks SET quantity=quantity-(?) WHERE user_id=(?) AND symbol=(?);", (qty, user_id, symbol))
-    cur.execute("UPDATE Users SET balance=balance+(?) WHERE id=(?);", (total_price, user_id))
+    cur.execute("UPDATE Stocks SET quantity=quantity-(?) WHERE user_id=(?) AND symbol=(?);",
+                (qty, user_id, symbol))
+    cur.execute("UPDATE Users SET balance=balance+(?) WHERE id=(?);",
+                (total_price, user_id))
     conn.commit()
