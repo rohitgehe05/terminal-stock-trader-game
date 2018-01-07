@@ -59,13 +59,14 @@ def main_menu():
 def login_menu(username):
     init(autoreset=True)
     user_input = 0
-    while user_input != 5:
+    while user_input != 6:
         user_input = input(Fore.BLUE + '''\nChoose an option:\n
         1. See my portfolio
         2. Stock search
         3. Buy stocks
         4. Sell stocks
-        5. Logout\n
+        5. See my order history
+        6. Logout\n
         >> ''')
         try:
             user_input = int(user_input)
@@ -73,17 +74,17 @@ def login_menu(username):
             print(Fore.RED + Style.BRIGHT + '\nINVALID OPTION, TRY AGAIN!\n')
         if user_input == 1:  # get portfolio
             get_portfolio(username)
-            pass
         elif user_input == 2:  # company search
             company = str(
                 input("\nEnter the name of the company you want to search for: "))
             stock_search(company)
-            pass
         elif user_input == 3:  # buy stock
             buy_stock(username)
         elif user_input == 4:  # sell stock
             sell_stock(username)
-        elif user_input == 5:  # logout
+        elif user_input == 5:
+            get_trade_history(username)
+        elif user_input == 6:  # logout
             break
         else:
             print(Fore.RED + Style.BRIGHT + '\nINVALID OPTION, TRY AGAIN!\n')
@@ -188,3 +189,18 @@ def sell_stock(username):
                 print('Your balance is now ${0:.2f}.'.format(balance))
     else:
         print(Fore.RED + Style.BRIGHT + '\nNetwork error, please try again!')
+
+
+def get_trade_history(username):
+    t = PrettyTable()
+    history = controller.get_trade_history(username)
+    # history validation else, print table
+    if history == 0:
+        print(Fore.RED + Style.BRIGHT +
+              '\nYou have no transactions with us, choose 3 to get to buying your first stock!\n')
+    else:
+        t.field_names = ["Ticker Symbol", "Price Bought",
+                         "Order Value", "Quantity Bought", "Transaction Type"]
+        for row in history:
+            t.add_row([row[2], row[3], row[4], row[5], row[6]])
+        print('\n', t)
