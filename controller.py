@@ -19,8 +19,12 @@ def create_account(username, password, name):
         return 0
 
 
+def view_stock(user_id):
+    pass
+
+
 def company_search(company):
-    search = Markit()
+    search = Lookup()
     data = search.company_search(company)
     if(data is not None):
         return data
@@ -74,5 +78,4 @@ def sell_stock(symbol, qty, username):
         return last_price, total_price, model.get_balance(user_id), response
 
 
-def view_stock(user_id):
-    pass
+# print(company_search('microsoft'))
