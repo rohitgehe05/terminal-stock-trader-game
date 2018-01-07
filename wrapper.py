@@ -44,17 +44,3 @@ class Lookup:
             return search.json()[0].get('price_usd')
         except:
             pass
-
-# q = Lookup()
-# x = PrettyTable()
-# x.field_names = q.crypto_search('bitcoin').keys()
-# x.add_row(q.crypto_search('bitcoin').values())
-# print(x.get_string(fields=["name", "symbol", "price_usd", "price_btc",
-#                            "market_cap_usd", "24h_volume_usd", "percent_change_24h", "percent_change_7d"]))
-# pprint(q.get_details('msft'))
-# x.field_names = q.get_details('msft').keys()
-# x.add_row(q.get_details('msft').values())
-# print(x.get_string(fields=["Name", "Symbol", "LastPrice", "Change",
-#                            "ChangePercent", "ChangeYTD", "ChangePercentYTD", "Volume"]))
-
-# print(q.company_search('microsoft'))
