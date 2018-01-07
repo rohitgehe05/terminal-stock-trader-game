@@ -51,10 +51,17 @@ def get_stock_qty(user_id, symbol):
         return None
 
 
+def get_portfolio(user_id):
+    cur.execute("SELECT * FROM Stocks WHERE user_id=(?);", (user_id,))
+    result = cur.fetchall()
+    return result
+
+
 # User trading logic
 
 
 def buy_stock(user_id, symbol, last_price, total_price, qty):
+    txn_type = "BUY"
     cur.execute(
         "SELECT * FROM Stocks WHERE user_id=(?) AND symbol=(?);", (user_id, symbol))
     existing = cur.fetchone()
@@ -64,14 +71,21 @@ def buy_stock(user_id, symbol, last_price, total_price, qty):
     else:
         cur.execute(
             "UPDATE Stocks SET quantity=quantity+(?) WHERE user_id=(?) AND symbol=(?);", (qty, user_id, symbol))
+        cur.execute(
+            "UPDATE Stocks SET price=price+(?)/quantity WHERE user_id=(?) AND symbol=(?);", (last_price, user_id, symbol))
     cur.execute(
         "UPDATE Users SET balance=balance-(?) WHERE id=(?);", (total_price, user_id))
+    cur.execute("INSERT INTO History(user_id, symbol, price, order_value, quantity, transaction_type) VALUES(?,?,?,?,?,?);",
+                (user_id, symbol, last_price, total_price, qty, txn_type))
     conn.commit()
 
 
 def sell_stock(user_id, symbol, last_price, total_price, qty):
+    txn_type = "SELL"
     cur.execute("UPDATE Stocks SET quantity=quantity-(?) WHERE user_id=(?) AND symbol=(?);",
                 (qty, user_id, symbol))
     cur.execute("UPDATE Users SET balance=balance+(?) WHERE id=(?);",
                 (total_price, user_id))
+    cur.execute("INSERT INTO History(user_id, symbol, price, order_value, quantity, transaction_type) VALUES(?,?,?,?,?,?);",
+                (user_id, symbol, last_price, total_price, qty, txn_type))
     conn.commit()
