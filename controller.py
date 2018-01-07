@@ -92,4 +92,10 @@ def sell_stock(symbol, qty, username):
         return last_price, total_price, model.get_balance(user_id), response
 
 
-# print(company_search('microsoft'))
+def get_trade_history(username):
+    user_id = model.get_user_id(username)
+    history = model.get_trade_history(user_id)
+    if history == None:
+        return 0
+    else:
+        return history
