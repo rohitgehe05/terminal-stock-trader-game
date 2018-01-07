@@ -3,7 +3,7 @@ from colorama import init, Fore, Style
 from prettytable import PrettyTable
 from IPython import embed
 import os
-import getpass
+from getpass import getpass
 
 
 init(autoreset=True)
@@ -27,9 +27,9 @@ def main_menu():
         except ValueError:
             print(Fore.RED + Style.BRIGHT + '\nINVALID OPTION, TRY AGAIN!\n')
         if isinstance(user_input, int) == True:
-            if user_input == 1:
+            if user_input == 1:  # login
                 username = str(input('\nPlease enter your username: '))
-                password = str(getpass.getpass('Please enter your password: '))
+                password = str(getpass('Please enter your password: '))
                 if controller.login(username, password) == 1:
                     print(Fore.GREEN +
                           Style.BRIGHT + '\nLogin successful!')
@@ -37,17 +37,17 @@ def main_menu():
                 else:
                     print(Fore.RED +
                           Style.BRIGHT + '\nINVALID LOGIN!')
-            elif user_input == 2:
+            elif user_input == 2:  # signup
                 username = str(input('\nPlease enter your username: '))
-                password = str(input('Please enter your password: '))
-                name = str(input('Pleas enter your full name: '))
+                password = str(getpass('Please enter your password: '))
+                name = str(input('Please enter your full name: '))
                 if controller.create_account(username, password, name) == 1:
                     print(Fore.GREEN + Style.BRIGHT +
                           '\nAccount creation successful!\n')
                 else:
                     print(Fore.RED + Style.BRIGHT +
                           '\nAccount creation failed\n')
-            elif user_input == 3:
+            elif user_input == 3:  # quit
                 print(Fore.CYAN + Style.BRIGHT +
                       'Thank you for checking this game out! Goodbye :)')
                 break
@@ -71,26 +71,37 @@ def login_menu(username):
             user_input = int(user_input)
         except ValueError:
             print(Fore.RED + Style.BRIGHT + '\nINVALID OPTION, TRY AGAIN!\n')
-        if user_input == 1:
-            # check portfolio
+        if user_input == 1:  # get portfolio
+            get_portfolio(username)
             pass
-        elif user_input == 2:
+        elif user_input == 2:  # company search
             company = str(
                 input("\nEnter the name of the company you want to search for: "))
             stock_search(company)
             pass
-        elif user_input == 3:
+        elif user_input == 3:  # buy stock
             buy_stock(username)
-        elif user_input == 4:
+        elif user_input == 4:  # sell stock
             sell_stock(username)
-        elif user_input == 5:
+        elif user_input == 5:  # logout
             break
         else:
             print(Fore.RED + Style.BRIGHT + '\nINVALID OPTION, TRY AGAIN!\n')
 
 
-def view_portfolio():
-    pass
+def get_portfolio(username):
+    # var initiation
+    t = PrettyTable()
+    portfolio = controller.get_portfolio(username)
+    # portfolio validation else, print table
+    if portfolio == 0:
+        print(Fore.RED + Style.BRIGHT +
+              '\nYou do not have any shares! But you still have $100000 to spend.\n')
+    else:
+        t.field_names = ["Ticker Symbol", "Price Bought", "Quantity Held"]
+        for row in portfolio:
+            t.add_row([row[2], row[3], row[4]])
+        print('\n', t)
 
 
 def stock_search(company):
