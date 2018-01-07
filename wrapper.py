@@ -1,4 +1,6 @@
 import requests
+from prettytable import PrettyTable
+from pprint import pprint
 
 
 class Lookup:
@@ -22,10 +24,17 @@ class Lookup:
         except ValueError:
             return 0
 
+    def get_details(self, string):
+        search = requests.get(self.quote_url + string)
+        try:
+            return search.json()
+        except ValueError:
+            return 0
+
     def crypto_search(self, string):
         try:
             search = requests.get(self.base_url + string + '/?convert=USD')
-            return search.json()
+            return search.json()[0]
         except:
             pass
 
@@ -36,10 +45,14 @@ class Lookup:
         except:
             pass
 
-# m = Lookup()
-# print(m.company_search('aapl'))
-# print(m.get_quote('aapl'))
-
-# c = Lookup()
-# print(c.crypto_search('bitcoin'))
-# print(c.crypto_price('bitcoin'))
+# q = Lookup()
+# x = PrettyTable()
+# x.field_names = q.crypto_search('bitcoin').keys()
+# x.add_row(q.crypto_search('bitcoin').values())
+# print(x.get_string(fields=["name", "symbol", "price_usd", "price_btc",
+#                            "market_cap_usd", "24h_volume_usd", "percent_change_24h", "percent_change_7d"]))
+# pprint(q.get_details('msft'))
+# x.field_names = q.get_details('msft').keys()
+# x.add_row(q.get_details('msft').values())
+# print(x.get_string(fields=["Name", "Symbol", "LastPrice", "Change",
+#                            "ChangePercent", "ChangeYTD", "ChangePercentYTD", "Volume"]))
