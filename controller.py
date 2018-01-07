@@ -19,8 +19,13 @@ def create_account(username, password, name):
         return 0
 
 
-def view_stock(user_id):
-    pass
+def get_portfolio(username):
+    user_id = model.get_user_id(username)
+    portfolio = model.get_portfolio(user_id)
+    if portfolio == None:
+        return 0
+    else:
+        return portfolio
 
 
 def company_search(company):
