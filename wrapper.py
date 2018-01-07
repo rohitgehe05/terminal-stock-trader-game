@@ -13,7 +13,7 @@ class Lookup:
     def company_search(self, string):
         search = requests.get(self.lookup_url + string)
         try:
-            return search.json()
+            return search.json()[0]
         except:
             return 0
 
@@ -56,3 +56,5 @@ class Lookup:
 # x.add_row(q.get_details('msft').values())
 # print(x.get_string(fields=["Name", "Symbol", "LastPrice", "Change",
 #                            "ChangePercent", "ChangeYTD", "ChangePercentYTD", "Volume"]))
+
+# print(q.company_search('microsoft'))
