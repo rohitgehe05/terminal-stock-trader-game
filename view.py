@@ -158,6 +158,7 @@ def buy_stock(username):
 def sell_stock(username):
     # var initiation
     t = PrettyTable()
+    print()
     symbol = str(input("Enter the ticker symbol for the company: ")).upper()
     qty = int(input("Enter the quantity to sell: "))
     # print table
