@@ -41,6 +41,15 @@ def get_quote(symbol):
         return False
 
 
+def get_details(symbol):
+    details = Lookup()
+    data = details.get_details(symbol)
+    if data is not None:
+        return data
+    else:
+        return False
+
+
 def buy_stock(symbol, qty, username):
     user_id = model.get_user_id(username)
     last_price = get_quote(symbol)
