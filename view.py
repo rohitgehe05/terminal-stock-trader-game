@@ -1,9 +1,10 @@
 import controller
+import os
 from colorama import init, Fore, Style
 from prettytable import PrettyTable
-from IPython import embed
-import os
 from getpass import getpass
+from IPython import embed
+from bcrypt import hashpw, gensalt
 
 
 init(autoreset=True)
@@ -15,6 +16,7 @@ print(Fore.YELLOW + Style.BRIGHT + '-' * 30)
 
 def main_menu():
     init(autoreset=True)
+    # var initiation
     user_input = 0
     while user_input != 3:
         user_input = input(Fore.RED + '''\nWhat would you like to do?\n
@@ -22,35 +24,45 @@ def main_menu():
         2. Create a new account
         3. Quit app\n
         >> ''')
+        # validating user_input
         try:
             user_input = int(user_input)
         except ValueError:
             print(Fore.RED + Style.BRIGHT + '\nINVALID OPTION, TRY AGAIN!\n')
         if isinstance(user_input, int) == True:
-            if user_input == 1:  # login
+            # login
+            if user_input == 1:
                 username = str(input('\nPlease enter your username: '))
-                password = str(getpass('Please enter your password: '))
-                if controller.login(username, password) == 1:
-                    print(Fore.GREEN +
-                          Style.BRIGHT + '\nLogin successful!')
-                    login_menu(username)
+                attempt = str(getpass('Please enter your password: ')).encode()
+                hashed = controller.login(username)
+                # print(password)
+                if hashed != 0:
+                    if hashpw(attempt, hashed) == hashed:
+                        print(Fore.GREEN + Style.BRIGHT + '\nLogin successful!')
+                        login_menu(username)
+                    else:
+                        print(Fore.RED + Style.BRIGHT + '\nINVALID LOGIN!')
                 else:
-                    print(Fore.RED +
-                          Style.BRIGHT + '\nINVALID LOGIN!')
-            elif user_input == 2:  # signup
+                    print(Fore.RED + Style.BRIGHT +
+                          '\nPlease check your username or password!')
+            # signup
+            elif user_input == 2:
                 username = str(input('\nPlease enter your username: '))
                 password = str(getpass('Please enter your password: '))
                 name = str(input('Please enter your full name: '))
-                if controller.create_account(username, password, name) == 1:
+                hashed = hashpw(password.encode(), gensalt())
+                if controller.create_account(username, hashed, name) == 1:
                     print(Fore.GREEN + Style.BRIGHT +
                           '\nAccount creation successful!\n')
                 else:
                     print(Fore.RED + Style.BRIGHT +
                           '\nAccount creation failed\n')
-            elif user_input == 3:  # quit
+            # quit
+            elif user_input == 3:
                 print(Fore.CYAN + Style.BRIGHT +
                       'Thank you for checking this game out! Goodbye :)')
                 break
+            # invalid option
             elif user_input > 3:
                 print(Fore.RED + Style.BRIGHT +
                       '\nINVALID OPTION, TRY AGAIN!\n')
@@ -58,6 +70,7 @@ def main_menu():
 
 def login_menu(username):
     init(autoreset=True)
+    # var initiation
     user_input = 0
     while user_input != 6:
         user_input = input(Fore.BLUE + '''\nChoose an option:\n
@@ -68,24 +81,32 @@ def login_menu(username):
         5. See my order history
         6. Logout\n
         >> ''')
+        # validating user_input
         try:
             user_input = int(user_input)
         except ValueError:
             print(Fore.RED + Style.BRIGHT + '\nINVALID OPTION, TRY AGAIN!\n')
-        if user_input == 1:  # get portfolio
+        # get portfolio
+        if user_input == 1:
             get_portfolio(username)
-        elif user_input == 2:  # company search
+        # company search
+        elif user_input == 2:
             company = str(
                 input("\nEnter the name of the company you want to search for: "))
             stock_search(company)
-        elif user_input == 3:  # buy stock
+        # buy stock
+        elif user_input == 3:
             buy_stock(username)
-        elif user_input == 4:  # sell stock
+        # sell stock
+        elif user_input == 4:
             sell_stock(username)
+        # get trade history
         elif user_input == 5:
             get_trade_history(username)
-        elif user_input == 6:  # logout
+        # logout
+        elif user_input == 6:
             break
+        # invalid option
         else:
             print(Fore.RED + Style.BRIGHT + '\nINVALID OPTION, TRY AGAIN!\n')
 
@@ -176,7 +197,7 @@ def sell_stock(username):
             controller.get_quote(symbol) * qty))
         confirmation = str(input(
             'Are you sure you want to go ahead with this transaction? (Y/N) '))
-        # validate confirmation and do actual buying of stock
+        # validate confirmation and do actual selling of stock
         if confirmation != 'Y' and confirmation != 'y':
             print(Fore.RED + Style.BRIGHT + '\nINVALID OPTION, TRY AGAIN!\n')
         else:
@@ -200,7 +221,7 @@ def sell_stock(username):
 def get_trade_history(username):
     t = PrettyTable()
     history = controller.get_trade_history(username)
-    # history validation else, print table
+    # history validation on db and print table
     if history == 0:
         print(Fore.RED + Style.BRIGHT +
               '\nYou have no transactions with us, choose 3 to get to buying your first stock!\n')
