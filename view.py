@@ -124,13 +124,16 @@ def stock_search(company):
     # var initiation
     t = PrettyTable()
     # print table
-    if controller.company_search(company) != 0:
-        t.field_names = controller.company_search(company).keys()
-        t.add_row(controller.company_search(company).values())
+    search = controller.company_search(company)
+    if search == 0:
+        print(Fore.CYAN + Style.BRIGHT +
+              '\nWhoops! We could not find the company named "' + company + '"')
+    elif search is not None:
+        t.field_names = search.keys()
+        t.add_row(search.values())
         print('\n', t)
     else:
-        print(Fore.RED + Style.BRIGHT +
-              '\nWhoops! We could not find the company named "' + company + '"')
+        print(Fore.RED + Style.BRIGHT + '\nThere is a network error!')
 
 
 def buy_stock(username):
@@ -140,9 +143,10 @@ def buy_stock(username):
     symbol = str(input("Enter the ticker symbol for the company: ")).upper()
     qty = int(input("Enter the quantity to buy: "))
     # print table
-    if controller.get_details(symbol) != 0:
-        t.field_names = controller.get_details(symbol).keys()
-        t.add_row(controller.get_details(symbol).values())
+    details = controller.get_details(symbol)
+    if details != 0:
+        t.field_names = details.keys()
+        t.add_row(details.values())
         print('\n' + t.get_string(fields=["Name", "Symbol", "LastPrice", "Change",
                                           "ChangePercent", "ChangeYTD", "ChangePercentYTD", "Volume"]) + '\n')
         print('Your total purchase value is ${0:.2f}'.format(
@@ -177,9 +181,10 @@ def sell_stock(username):
     symbol = str(input("Enter the ticker symbol for the company: ")).upper()
     qty = int(input("Enter the quantity to sell: "))
     # print table
-    if controller.get_details(symbol) != 0:
-        t.field_names = controller.get_details(symbol).keys()
-        t.add_row(controller.get_details(symbol).values())
+    details = controller.get_details(symbol)
+    if details != 0:
+        t.field_names = details.keys()
+        t.add_row(details.values())
         print('\n' + t.get_string(fields=["Name", "Symbol", "LastPrice", "Change",
                                           "ChangePercent", "ChangeYTD", "ChangePercentYTD", "Volume"]) + '\n')
         print('Your total purchase value is ${0:.2f}'.format(

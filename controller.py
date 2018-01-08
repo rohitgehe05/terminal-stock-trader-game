@@ -31,10 +31,10 @@ def get_portfolio(username):
 def company_search(company):
     search = Lookup()
     data = search.company_search(company)
-    if(data is not None):
+    if data is not None:
         return data
     else:
-        return False
+        return 0
 
 
 def get_quote(symbol):
