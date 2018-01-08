@@ -35,11 +35,14 @@ def main_menu():
                 username = str(input('\nPlease enter your username: '))
                 attempt = str(getpass('Please enter your password: ')).encode()
                 hashed = controller.login(username)
-                # print(password)
                 if hashed != 0:
                     if hashpw(attempt, hashed) == hashed:
                         print(Fore.GREEN + Style.BRIGHT + '\nLogin successful!')
-                        login_menu(username)
+                        if username != 'admin':
+                            login_menu(username)
+                        else:
+                            admin_menu()
+                            pass
                     else:
                         print(Fore.RED + Style.BRIGHT + '\nINVALID LOGIN!')
                 else:
@@ -53,10 +56,11 @@ def main_menu():
                 hashed = hashpw(password.encode(), gensalt())
                 if controller.create_account(username, hashed, name) == 1:
                     print(Fore.GREEN + Style.BRIGHT +
-                          '\nAccount creation successful!\n')
+                          '\nAccount creation successful!')
                 else:
                     print(Fore.RED + Style.BRIGHT +
-                          '\nAccount creation failed\n')
+                          'Account creation failed\n')
+
             # quit
             elif user_input == 3:
                 print(Fore.CYAN + Style.BRIGHT +
@@ -105,6 +109,29 @@ def login_menu(username):
             get_trade_history(username)
         # logout
         elif user_input == 6:
+            break
+        # invalid option
+        else:
+            print(Fore.RED + Style.BRIGHT + '\nINVALID OPTION, TRY AGAIN!\n')
+
+
+def admin_menu():
+    # var initiation
+    user_input = 0
+    while user_input != 2:
+        user_input = input(Fore.BLUE + '''\nChoose an option:\n
+        1. View Leaderboard
+        2. Logout\n
+        >> ''')
+        try:
+            user_input = int(user_input)
+        except ValueError:
+            print(Fore.RED + Style.BRIGHT + '\nINVALID OPTION, TRY AGAIN!\n')
+        # view leaderboard
+        if user_input == 1:
+            view_leaderboard()
+        # logout
+        elif user_input == 2:
             break
         # invalid option
         else:
@@ -230,4 +257,18 @@ def get_trade_history(username):
                          "Order Value", "Quantity Bought", "Transaction Type"]
         for row in history:
             t.add_row([row[2], row[3], row[4], row[5], row[6]])
+        print('\n', t)
+
+
+def view_leaderboard():
+    t = PrettyTable()
+    lb = controller.view_leaderboard()
+    # lb validation on db and print table
+    if lb == 0:
+        print(Fore.RED + Style.BRIGHT +
+              '\nLooks like we do not have any transactions, Chief!\n')
+    else:
+        t.field_names = ["User ID", "Name", "Username", "Portfolio Value ($)"]
+        for row in lb:
+            t.add_row([row[0], row[1], row[2], round(row[3], 2)])
         print('\n', t)
