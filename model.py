@@ -20,8 +20,6 @@ def login(username):
     pw = cur.fetchone()
     return pw
 
-# print(login('rg05', '1234'))
-
 
 def get_user_id(username):
     user_id = cur.execute(
