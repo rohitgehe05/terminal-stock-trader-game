@@ -60,6 +60,7 @@ def main_menu():
                 else:
                     print(Fore.RED + Style.BRIGHT +
                           'Account creation failed\n')
+
             # quit
             elif user_input == 3:
                 print(Fore.CYAN + Style.BRIGHT +
@@ -132,6 +133,7 @@ def admin_menu():
         # logout
         elif user_input == 2:
             break
+        # invalid option
         else:
             print(Fore.RED + Style.BRIGHT + '\nINVALID OPTION, TRY AGAIN!\n')
 
