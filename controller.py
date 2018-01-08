@@ -99,3 +99,11 @@ def get_trade_history(username):
         return 0
     else:
         return history
+
+
+def view_leaderboard():
+    lb = model.view_leaderboard()
+    if lb == None:
+        return 0
+    else:
+        return lb
