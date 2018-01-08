@@ -1,4 +1,4 @@
-# rg05-phase1-assessment
+# Terminal Stock Trader Game
 
 ### How-to?
 
