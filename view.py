@@ -33,18 +33,24 @@ def main_menu():
             # login
             if user_input == 1:
                 username = str(input('\nPlease enter your username: '))
-                password = str(getpass('Please enter your password: '))
-                if controller.login(username, password) == 1:
-                    print(Fore.GREEN + Style.BRIGHT + '\nLogin successful!')
-                    login_menu(username)
+                attempt = str(getpass('Please enter your password: ')).encode()
+                hashed = controller.login(username)
+                # print(password)
+                if hashed != 0:
+                    if hashpw(attempt, hashed) == hashed:
+                        print(Fore.GREEN + Style.BRIGHT + '\nLogin successful!')
+                        login_menu(username)
+                    else:
+                        print(Fore.RED + Style.BRIGHT + '\nINVALID LOGIN!')
                 else:
-                    print(Fore.RED + Style.BRIGHT + '\nINVALID LOGIN!')
+                    print(Fore.RED + Style.BRIGHT +
+                          '\nPlease check your username or password!')
             # signup
             elif user_input == 2:
                 username = str(input('\nPlease enter your username: '))
                 password = str(getpass('Please enter your password: '))
                 name = str(input('Please enter your full name: '))
-                hashed = hashpw(password, gensalt())
+                hashed = hashpw(password.encode(), gensalt())
                 if controller.create_account(username, hashed, name) == 1:
                     print(Fore.GREEN + Style.BRIGHT +
                           '\nAccount creation successful!\n')
