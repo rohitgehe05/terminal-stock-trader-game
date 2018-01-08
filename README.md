@@ -8,4 +8,4 @@
 2. Runfile:
 `python3 main.py`
 
-. Make loads of profit! :moneybag::moneybag::moneybag:
+3. Make loads of profit! :moneybag::moneybag::moneybag:
