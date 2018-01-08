@@ -14,11 +14,13 @@ def add_user(username, password, name, balance):
     conn.commit()
 
 
-def login(username, password):
+def login(username):
     user = cur.execute(
-        "SELECT id FROM Users WHERE username=(?) and password=(?);", (username, password))
-    user = cur.fetchone()
-    return user
+        "SELECT password FROM Users WHERE username=(?);", (username, ))
+    pw = cur.fetchone()
+    return pw
+
+# print(login('rg05', '1234'))
 
 
 def get_user_id(username):

@@ -3,12 +3,12 @@ from wrapper import Lookup
 from IPython import embed
 
 
-def login(username, password):
-    validator = model.login(username, password)
+def login(username):
+    validator = model.login(username)
     if validator == None:
         return 0
     elif validator is not None:
-        return 1
+        return validator[0]
 
 
 def create_account(username, password, name):
