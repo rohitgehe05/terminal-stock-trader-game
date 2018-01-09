@@ -29,6 +29,7 @@ def create_tables():
 
     cur.execute("""CREATE TABLE IF NOT EXISTS 'History' (
     'id' INTEGER,
+    'timestamp' VARCHAR,
     'user_id' INTEGER,
     'symbol' VARCHAR,
     'price' REAL,
