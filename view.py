@@ -253,10 +253,10 @@ def get_trade_history(username):
         print(Fore.RED + Style.BRIGHT +
               '\nYou have no transactions with us, choose 3 to get to buying your first stock!\n')
     else:
-        t.field_names = ["Ticker Symbol", "Price Bought",
+        t.field_names = ["Timestamp", "Ticker Symbol", "Price Bought",
                          "Order Value", "Quantity Bought", "Transaction Type"]
         for row in history:
-            t.add_row([row[2], row[3], row[4], row[5], row[6]])
+            t.add_row([row[1], row[3], row[4], row[5], row[6], row[7]])
         print('\n', t)
 
 
