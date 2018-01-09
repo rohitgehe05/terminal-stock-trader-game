@@ -1,5 +1,6 @@
 import sqlite3
-from IPython import embed
+from datetime import datetime
+# from IPython import embed
 
 conn = sqlite3.connect('stock_trader.sqlite')
 cur = conn.cursor()
@@ -78,8 +79,8 @@ def buy_stock(user_id, symbol, last_price, total_price, qty):
     conn.commit()
     cur.execute(
         "UPDATE Stocks SET total_value = price * quantity WHERE symbol = (?) AND user_id = (?);", (symbol, user_id))
-    cur.execute("INSERT INTO History(user_id, symbol, price, order_value, quantity, transaction_type) VALUES(?,?,?,?,?,?);",
-                (user_id, symbol, last_price, total_price, qty, txn_type))
+    cur.execute("INSERT INTO History(timestamp, user_id, symbol, price, order_value, quantity, transaction_type) VALUES(?,?,?,?,?,?,?);",
+                (datetime.now(), user_id, symbol, last_price, total_price, qty, txn_type))
     conn.commit()
 
 # buy_stock(1, 'AAPL', 100, 1000, 10)
@@ -94,8 +95,8 @@ def sell_stock(user_id, symbol, last_price, total_price, qty):
     conn.commit()
     cur.execute(
         "UPDATE Stocks SET total_value = price * quantity WHERE symbol = (?) AND user_id = (?);", (symbol, user_id))
-    cur.execute("INSERT INTO History(user_id, symbol, price, order_value, quantity, transaction_type) VALUES(?,?,?,?,?,?);",
-                (user_id, symbol, last_price, total_price, qty, txn_type))
+    cur.execute("INSERT INTO History(timestamp, user_id, symbol, price, order_value, quantity, transaction_type) VALUES(?,?,?,?,?,?,?);",
+                (datetime.now(), user_id, symbol, last_price, total_price, qty, txn_type))
     conn.commit()
 
 
